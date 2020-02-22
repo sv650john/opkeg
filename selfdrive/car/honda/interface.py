@@ -532,6 +532,11 @@ class CarInterface(CarInterfaceBase):
     if self.CP.enableCruise and ret.vEgo < self.CP.minEnableSpeed:
       events.append(create_event('speedTooLow', [ET.NO_ENTRY]))
 
+    # BoschGasPress - Gas pedal pressing does not disable OP engagement - also panda changes in safety_honda.h
+    if ret.brakePressed and (not self.brake_pressed_prev or ret.vEgo > 0.001):
+        events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
+
+
     # it can happen that car cruise disables while comma system is enabled: need to
     # keep braking if needed or if the speed is very low
     if self.CP.enableCruise and not ret.cruiseState.enabled and (c.actuators.brake <= 0. or not self.CP.openpilotLongitudinalControl):
