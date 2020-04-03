@@ -33,10 +33,8 @@ class CarInterface(CarInterfaceBase):
     # *** init the major players ***
     canbus = CanBus()
     self.CS = CarState(CP, canbus)
-    self.VM = VehicleModel(CP)
     self.pt_cp = get_powertrain_can_parser(CP, canbus)
     self.ch_cp = get_chassis_can_parser(CP, canbus)
-    self.ch_cp_dbc_name = DBC[CP.carFingerprint]['chassis']
 
     self.CC = None
     if CarController is not None:
@@ -207,7 +205,6 @@ class CarInterface(CarInterfaceBase):
     ret = self.CS.update(self.cp)
 
     ret.canValid = self.cp.can_valid
-    ret.yawRate = self.VM.yaw_rate(ret.steeringAngle * CV.DEG_TO_RAD, ret.vEgo)
     ret.steeringRateLimited = self.CC.steer_rate_limited if self.CC is not None else False
 
     buttonEvents = []
