@@ -3,7 +3,7 @@ from cereal import car
 from common.numpy_fast import interp
 from selfdrive.config import Conversions as CV
 from selfdrive.controls.lib.drive_helpers import create_event, EventTypes as ET
-from selfdrive.car.gm.values import CAR, Ecu, ECU_FINGERPRINT, CruiseButtons, \
+from selfdrive.car.gm.values import CAR, Ecu, ECU_FINGERPRINT, \
                                     SUPERCRUISE_CARS, AccState, FINGERPRINTS
 from selfdrive.car.gm.carstate import CarState, CruiseButtons, get_powertrain_can_parser, get_chassis_can_parser
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, is_ecu_disconnected, gen_empty_fingerprint
@@ -13,6 +13,13 @@ FOLLOW_AGGRESSION = 0.15 # (Acceleration/Decel aggression) Lower is more aggress
 
 
 ButtonType = car.CarState.ButtonEvent.Type
+
+class CanBus(CarInterfaceBase):
+  def __init__(self):
+    self.powertrain = 0
+    self.obstacle = 1
+    self.chassis = 2
+    self.sw_gmlan = 3
 
 class CarInterface(CarInterfaceBase):
   def __init__(self, CP, CarController):
